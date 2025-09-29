@@ -1,58 +1,61 @@
-# DIO - Trilha .NET - API e Entity Framework
-www.dio.me
+# Trilha .NET API - Desafio Sistema de Agendamento
 
-## Desafio de projeto
-Para este desafio, você precisará usar seus conhecimentos adquiridos no módulo de API e Entity Framework, da trilha .NET da DIO.
+API em **.NET 6** para gerenciamento de tarefas, criada como desafio do curso/trilha.
 
-## Contexto
-Você precisa construir um sistema gerenciador de tarefas, onde você poderá cadastrar uma lista de tarefas que permitirá organizar melhor a sua rotina.
+## Tecnologias
 
-Essa lista de tarefas precisa ter um CRUD, ou seja, deverá permitir a você obter os registros, criar, salvar e deletar esses registros.
+- .NET 6
+- C#
+- Entity Framework Core (EF Core)
+- SQL Server (LocalDB / Express)
+- Swagger (OpenAPI) para documentação e teste de endpoints
 
-A sua aplicação deverá ser do tipo Web API ou MVC, fique a vontade para implementar a solução que achar mais adequado.
+## Funcionalidades
 
-A sua classe principal, a classe de tarefa, deve ser a seguinte:
+- Criar, listar, atualizar e deletar tarefas
+- Buscar tarefas por:
+  - Id
+  - Título
+  - Data
+  - Status (EnumStatusTarefa)
+- EnumStatusTarefa como string (Pendente / Finalizado)
 
-![Diagrama da classe Tarefa](diagrama.png)
+## Estrutura do Projeto
 
-Não se esqueça de gerar a sua migration para atualização no banco de dados.
+- **Controllers/TarefaController.cs** → Contém todos os endpoints da API
+- **Models/Tarefa.cs** → Modelo da entidade Tarefa
+- **Models/EnumStatusTarefa.cs** → Enum de status da tarefa
+- **Context/OrganizadorContext.cs** → DbContext para EF Core
+- **Migrations/** → Pasta gerada pelo EF Core com a migration `InitialCreate`
 
-## Métodos esperados
-É esperado que você crie o seus métodos conforme a seguir:
+## Passo a passo para rodar localmente
 
+1. **Clonar o repositório**
+```bash
+git clone https://github.com/ThiagoCsilvaa/trilha-net-api-desafio-sistema-de-agentamento.git
 
-**Swagger**
+2. Abrir pasta do projeto no VS Code
+cd trilha-net-api-desafio-sistema-de-agentamento
 
-
-![Métodos Swagger](swagger.png)
-
-
-**Endpoints**
-
-
-| Verbo  | Endpoint                | Parâmetro | Body          |
-|--------|-------------------------|-----------|---------------|
-| GET    | /Tarefa/{id}            | id        | N/A           |
-| PUT    | /Tarefa/{id}            | id        | Schema Tarefa |
-| DELETE | /Tarefa/{id}            | id        | N/A           |
-| GET    | /Tarefa/ObterTodos      | N/A       | N/A           |
-| GET    | /Tarefa/ObterPorTitulo  | titulo    | N/A           |
-| GET    | /Tarefa/ObterPorData    | data      | N/A           |
-| GET    | /Tarefa/ObterPorStatus  | status    | N/A           |
-| POST   | /Tarefa                 | N/A       | Schema Tarefa |
-
-Esse é o schema (model) de Tarefa, utilizado para passar para os métodos que exigirem
-
-```json
-{
-  "id": 0,
-  "titulo": "string",
-  "descricao": "string",
-  "data": "2022-06-08T01:31:07.056Z",
-  "status": "Pendente"
+3. Ajustar connection string em appsettings.Development.json
+"ConnectionStrings": {
+  "ConexaoPadrao": "Server=localhost\\SQLEXPRESS;Database=TrilhaDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true"
 }
-```
+
+4. Garantir que o ambiente seja Development
+$Env:ASPNETCORE_ENVIRONMENT = 'Development'
+
+5.Restaurar pacotes
+dotnet restore
+
+6.Criar migration e atualizar banco
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+
+7.Rodar a aplicação
+dotnet run --urls "http://localhost:5000"
+
+8.Testar endpoints
+http://localhost:5000/swagger
 
 
-## Solução
-O código está pela metade, e você deverá dar continuidade obedecendo as regras descritas acima, para que no final, tenhamos um programa funcional. Procure pela palavra comentada "TODO" no código, em seguida, implemente conforme as regras acima.
